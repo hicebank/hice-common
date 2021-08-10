@@ -16,11 +16,11 @@ class PydanticValidationError(PydanticValueError):
 
 def _validate_wrapper(func: Callable[[str], None], name: str, value: str) -> str:
     try:
-        func(value)
+        result = func(value)
     except ValidationError as e:
         raise PydanticValidationError(name=name, reason=str(e))
 
-    return value
+    return result
 
 
 class PhoneNumber(str):
