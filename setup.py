@@ -5,7 +5,7 @@ with open('README.md', 'r', encoding='utf-8') as fh:
 
 setuptools.setup(
     name='hice_common',
-    version='0.0.1',
+    version='0.0.2',
     author='hicebank.ru',
     author_email='tingaev@hicebank.ru',
     description='Phone number validator via pydantic',
@@ -19,4 +19,7 @@ setuptools.setup(
         'Operating System :: OS Independent',
     ],
     python_requires='>=3.6',
+    package_data={
+        "hice_common": ["py.typed"],
+    },
 )
