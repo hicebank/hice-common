@@ -30,7 +30,7 @@ def test_valid_phone_number(test_input: str, expected: str) -> None:
     assert validate_phone_number(test_input) == expected
 
     phone_number_model = PhoneNumberModel(phone_number=test_input)
-    assert phone_number_model.phone_number == test_input
+    assert phone_number_model.phone_number == expected
 
 
 @pytest.mark.parametrize('phone_number', [
