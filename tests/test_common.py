@@ -43,16 +43,15 @@ def test_valid_phone_number(test_input: str, expected: str) -> None:
     '792922225517',
     '892922225517',
     '7929ooo2217',
+    '69222120919',
+    '19222120919',
+    '09222120919',
+    '09222120919',
+    '92221209190',
 ])
 def test_wrong_phone_number(phone_number):
     with pytest.raises(PhoneNumberValidationError):
         validate_phone_number(phone_number)
-
-    with pytest.raises(PydanticValidationError):
-        PhoneNumberModel(phone_number=phone_number)
-
-    with pytest.raises(PydanticValidationError):
-        PhoneNumberModel(phone_number=phone_number)
 
     with pytest.raises(PydanticValidationError):
         PhoneNumberModel(phone_number=phone_number)
