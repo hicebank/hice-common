@@ -1,6 +1,7 @@
 from datetime import datetime, date
 from decimal import Decimal
 from typing import Any, Union, Dict, List
+from uuid import UUID
 
 
 def to_json_serializable(
@@ -9,6 +10,8 @@ def to_json_serializable(
     if isinstance(data, (datetime, date)):
         return data.isoformat()
     elif isinstance(data, Decimal):
+        return str(data)
+    elif isinstance(data, UUID):
         return str(data)
     elif isinstance(data, list):
         for i in range(len(data)):
