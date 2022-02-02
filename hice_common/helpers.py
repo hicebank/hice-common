@@ -1,10 +1,13 @@
 import asyncio
+import logging
 from collections import defaultdict
 from datetime import datetime, date
 from decimal import Decimal
 from functools import wraps
 from typing import Any, Union, Dict, List, Callable, Tuple, Optional, Coroutine
 from uuid import UUID
+
+logger = logging.getLogger('hice_common')
 
 
 def to_json_serializable(
@@ -49,11 +52,13 @@ def cache_function(expire: int = 60 * 60) -> Callable[
                 try:
                     value = await func(*args, **kwargs)  # type: ignore
                 except Exception as e:
+                    logger.exception('while updating an exception occurred')
                     if current_value is not None:
-                        # add logging that was exception and we return cached value
+                        logger.error('will return cache value')
                         return current_value
                     raise e
                 else:
+                    logger.info(f'set {value} instead of {current_value}')
                     cache_value[key] = value
                     last_call[key] = datetime.utcnow()
             return cache_value[key]
@@ -70,11 +75,13 @@ def cache_function(expire: int = 60 * 60) -> Callable[
                 try:
                     value = func(*args, **kwargs)  # type: ignore
                 except Exception as e:
+                    logger.exception('while updating an exception occurred')
                     if current_value is not None:
-                        # add logging that was exception and we return cached value
+                        logger.error('will return cache value')
                         return current_value
                     raise e
                 else:
+                    logger.info(f'set {value} instead of {current_value}')
                     cache_value[key] = value
                     last_call[key] = datetime.utcnow()
             return cache_value[key]
