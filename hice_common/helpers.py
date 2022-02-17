@@ -9,6 +9,8 @@ from uuid import UUID
 
 logger = logging.getLogger('hice_common')
 
+JSONSerializable = Union[str, float, int, bool, None]
+
 
 def to_json_serializable(
     data: Any
@@ -26,6 +28,27 @@ def to_json_serializable(
     elif isinstance(data, dict):
         for key in data:
             data[key] = to_json_serializable(data[key])
+        return data
+    return data
+
+
+def to_json_serializable_multifunctional(
+    data: Any,
+    decimal_to: Callable[[Decimal], JSONSerializable] = float,
+) -> Union[Dict[str, Any], List[Dict[str, Any]], List[str], str]:
+    if isinstance(data, (datetime, date)):
+        return data.isoformat()
+    elif isinstance(data, Decimal):
+        return decimal_to(data)
+    elif isinstance(data, UUID):
+        return str(data)
+    elif isinstance(data, list):
+        for i in range(len(data)):
+            data[i] = to_json_serializable_multifunctional(data[i], decimal_to=decimal_to)
+        return data
+    elif isinstance(data, dict):
+        for key in data:
+            data[key] = to_json_serializable_multifunctional(data[key], decimal_to=decimal_to)
         return data
     return data
 
