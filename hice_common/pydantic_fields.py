@@ -1,4 +1,5 @@
-from typing import Any, Callable, Generator
+from decimal import Decimal
+from typing import Any, Callable, Generator, Union
 
 from .validators import ValidationError, validate_phone_number
 
@@ -31,3 +32,13 @@ class PhoneNumber(str):
     @classmethod
     def validate(cls, value: str) -> str:
         return _validate_wrapper(validate_phone_number, "phone_number", value)
+
+
+class BankDecimal(Decimal):
+    @classmethod
+    def __get_validators__(cls) -> CallableGenerator:
+        yield cls.validate
+
+    @classmethod
+    def validate(cls, value: Union[Decimal, float]) -> Decimal:
+        return Decimal(value).quantize(Decimal('1.00'))
