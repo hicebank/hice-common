@@ -114,3 +114,8 @@ def cache_function(expire: int = 60 * 60) -> Callable[
         return sync_wrapper
 
     return decorator
+
+
+def pretty_float_str(value: Union[Decimal, float]) -> str:
+    res = '{:,.2f}'.format(value).replace(',', ' ')
+    return res if res[-3:] != '.00' else res[:-3]
